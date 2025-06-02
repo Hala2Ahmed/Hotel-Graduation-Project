@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import Swal from 'sweetalert2';
 import { DateInput } from "@heroui/react";
 import { CalendarDate } from "@internationalized/date";
+import Loading from "../../components/Loading/Loading";
 
 export default function MyReservation() {
   const token = localStorage.getItem("token");
@@ -159,7 +160,7 @@ export default function MyReservation() {
   const bookings = data?.data || [];
 
   if (isLoading) {
-    return <div className="container mb-6">Loading reservations...</div>;
+    return <Loading />;
   }
 
   if (isError) {

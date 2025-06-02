@@ -10,25 +10,7 @@ export default function RoomDetailsUi({
   bookingError,
   handleSubmit,
 }) {
-  if (isLoading) {
-    return <div className="text-center py-20">Loading room details...</div>;
-  }
 
-  if (error) {
-    return (
-      <div className="text-center py-20">
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-          {"Failed to fetch room details"}
-        </div>
-        <Link
-          to="/Rooms-available"
-          className="text-blue-600 hover:text-blue-800"
-        >
-          Back to available rooms
-        </Link>
-      </div>
-    );
-  }
   return (
     <div className="m-4 py-5 px-4 md:m-10">
       <div className="flex mb-6">

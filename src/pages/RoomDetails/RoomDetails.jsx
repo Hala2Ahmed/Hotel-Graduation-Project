@@ -1,10 +1,11 @@
 import React from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import RoomDetailsUi from "../../components/RoomDetailsUi/RoomDetailsUi";
+import Loading from "../../components/Loading/Loading";
 export default function RoomDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -101,7 +102,25 @@ export default function RoomDetails() {
       bookRoom(bookingData);
     },
   });
+  if (isLoading) {
+    return <Loading />;
+  }
 
+  if (error) {
+    return (
+      <div className="text-center py-20">
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          {"Failed to fetch room details"}
+        </div>
+        <Link
+          to="/Rooms-available"
+          className="text-blue-600 hover:text-blue-800"
+        >
+          Back to available rooms
+        </Link>
+      </div>
+    );
+  }
   return (
     <RoomDetailsUi
       room={room}

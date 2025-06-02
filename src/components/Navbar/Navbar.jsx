@@ -116,7 +116,6 @@ export default function App() {
             <DropdownMenu aria-label="Profile Actions" variant="flat">
               <DropdownItem
                 key="My_Protofolio"
-                textValue="My Portfolio"
                 as={Link}
                 to="/my-profile"
               >
@@ -124,7 +123,6 @@ export default function App() {
               </DropdownItem>
               <DropdownItem
                 key="Booking_Now"
-                textValue="Booking Now"
                 as={Link}
                 to="/Rooms-available"
               >
@@ -132,18 +130,12 @@ export default function App() {
               </DropdownItem>
               <DropdownItem
                 key="My_reservations"
-                textValue="My Reservations"
                 as={Link}
                 to="/reservations"
               >
                 My Reservations
               </DropdownItem>
-              <DropdownItem
-                key="logout"
-                color="danger"
-                onPress={Logout}
-                textValue="Log Out"
-              >
+              <DropdownItem key="logout" color="danger" onPress={Logout}>
                 Log Out
               </DropdownItem>
             </DropdownMenu>

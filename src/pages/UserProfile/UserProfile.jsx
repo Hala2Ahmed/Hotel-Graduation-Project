@@ -6,6 +6,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import img from "../../assets/user.svg";
 import Swal from 'sweetalert2'
+import Loading from "../../components/Loading/Loading";
 const fetchProfile = async () => {
   const token = localStorage.getItem("token");
   if (!token) throw new Error("No token found. Please log in.");
@@ -125,7 +126,9 @@ export default function UserProfile() {
   };
 
   if (isLoading)
-    return <div className="p-4 container text-center">Loading...</div>;
+    return (
+        <Loading />
+    )
   if (error)
     return (
       <div className="p-4 container text-center text-red-500 h-[100vh]">
