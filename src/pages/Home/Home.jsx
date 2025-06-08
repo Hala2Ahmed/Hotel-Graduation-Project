@@ -14,80 +14,133 @@ import img11 from "../../assets/person_3.jpg";
 import img12 from "../../assets/person_4.jpg";
 import Slider from "react-slick/lib/slider";
 import { motion } from "framer-motion";
+const fadeInUp = {
+  hidden: { opacity: 0, y: 50 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: "easeOut" },
+  },
+};
+const fadeIn = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: 0.8 } },
+};
 
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+      when: "beforeChildren",
+    },
+  },
+};
+const settings = {
+  dots: true,
+  infinite: true,
+  speed: 1000,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  arrows: false,
+  autoplay: false,
+};
 export default function Home() {
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 1000,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: false,
-    autoplay: true,
-    autoplaySpeed: 2000,
-  };
-  const settingss = {
-    dots: true,
-    infinite: true,
-    speed: 100,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: false,
-    autoplay: true,
-    autoplaySpeed: 4000,
-  };
+  const rooms = [
+    { img: img2, title: "Single Room", price: "90$ / per night" },
+    { img: img3, title: "Family Room", price: "120$ / per night" },
+    { img: img4, title: "Presidential Room", price: "250$ / per night" },
+  ];
+  const testimonials = [
+    {
+      img: img9,
+      name: "Jean Smith",
+      quote:
+        "A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth",
+    },
+    {
+      img: img10,
+      name: "John Doe",
+      quote:
+        "Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.",
+    },
+    {
+      img: img11,
+      name: "John Doe",
+      quote:
+        "When she reached the first hills of the Italic Mountains, she had a last view back on the skyline of her hometown Bookmarksgrove, the headline of Alphabet Village and the subline of her own road, the Line Lane.",
+    },
+    {
+      img: img12,
+      name: "John Doe",
+      quote:
+        "When she reached the first hills of the Italic Mountains, she had a last view back on the skyline of her hometown Bookmarksgrove, the headline of Alphabet Village and the subline of her own road, the Line Lane.",
+    },
+  ];
+
   return (
     <>
       <section
-        className="bg-cover bg-center bg-no-repeat mx-0 h-screen"
+        className="bg-cover bg-center bg-no-repeat mx-0 h-screen overflow-hidden"
         style={{ backgroundImage: `url(${img})` }}
-        data-stellar-background-ratio="0.5"
       >
         <div className="container">
           <div className="flex justify-center items-center h-screen">
             <motion.div
-              initial={{ opacity: 0, scale: 0 }}
+              initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{
-                type: "spring",
-                stiffness: 100,
-                damping: 10,
-                delay: 0.5,
-              }}
+              transition={{ type: "spring", delay: 0.5 }}
               className="text-center text-white"
-              data-aos="fade-up"
             >
-              <span className="block mb-3 text-uppercase">
+              <motion.span
+                className="block mb-4 text-xl"
+                initial={{ y: -20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.7 }}
+              >
                 Welcome To Hope Hotel
-              </span>
-              <motion.h1 className="text-5xl font-bold">
+              </motion.span>
+              <motion.h1
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.9 }}
+                className="text-5xl font-bold"
+              >
                 A Best Place To Stay
               </motion.h1>
             </motion.div>
           </div>
         </div>
       </section>
-
-      <section className="py-20 bg-gray-100">
-        <div className="">
-          <div className="flex justify-center gap-10 flex-col lg:flex-row items-center">
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={staggerContainer}
+        className="py-20 bg-gray-100 overflow-hidden p-10"
+      >
+        <div>
+          <motion.div
+            variants={staggerContainer}
+            className="flex justify-center gap-10 flex-col lg:flex-row items-center"
+          >
             <motion.div
-              initial={{ opacity: 0, x: -100 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{
-                type: "spring",
-                stiffness: 100,
-                damping: 10,
-                delay: 0.3,
-              }}
+              variants={fadeInUp}
               className="w-full lg:w-1/2 mb-10 lg:mb-0"
-              data-aos="fade-up"
             >
-              <img src={img1} alt="Image" className="rounded-lg shadow-md" />
+              <motion.img
+                whileHover={{ scale: 1.02 }}
+                src={img1}
+                alt="Image"
+                className="rounded-lg shadow-md"
+              />
             </motion.div>
-            <div className="w-full lg:w-1/3" data-aos="fade-up">
-              <h2 className="text-3xl font-bold">Welcome!</h2>
-              <p className="mb-4">
+            <motion.div variants={fadeInUp} className="w-full lg:w-1/2">
+              <motion.h2 variants={fadeIn} className="text-3xl font-bold">
+                Welcome!
+              </motion.h2>
+              <motion.p variants={fadeIn} className="mb-4">
                 Clean, modern lines combine with a balanced, subdued color
                 scheme throughout the hotel’s elegantly masculine interiors.
                 Behind the pivoting brass panels, a subdued palette, teamed with
@@ -95,224 +148,134 @@ export default function Home() {
                 masculine look. A modern spatial concept combines natural
                 materials, clean lines, and glass—resulting in an elemental
                 experience where all of the senses are in perfect harmony.
-              </p>
-              <p className="mb-4">
+              </motion.p>
+              <motion.p variants={fadeIn} className="mb-4">
                 Gert Wingårdh and his team pay homage to the storied structure’s
                 roots while adding many signature touches. The building’s
                 imposing sense of space and elaborate, elegant detailing gives
                 the interiors a natural grandeur.
-              </p>
-            </div>
-          </div>
+              </motion.p>
+            </motion.div>
+          </motion.div>
         </div>
-      </section>
-      <section className="py-12">
+      </motion.section>
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.1 }}
+        variants={staggerContainer}
+        className="py-12 overflow-hidden"
+      >
         <div className=" mx-20">
           <div className="text-center mb-5">
-            <div className="w-full md:w-7/12 mx-auto">
-              <h2 className="text-4xl font-bold" data-aos="fade-up">
-                Rooms &amp; Suites
-              </h2>
-              <p className="mt-4" data-aos="fade-up" data-aos-delay={100}>
+            <motion.div
+              variants={fadeInUp}
+              className="w-full md:w-7/12 mx-auto"
+            >
+              <h2 className="text-4xl font-bold">Rooms &amp; Suites</h2>
+              <p className="mt-4">
                 Far far away, behind the word mountains, far from the countries
                 Vokalia and Consonantia, there live the blind texts. Separated
                 they live in Bookmarksgrove right at the coast of the Semantics,
                 a large language ocean.
               </p>
-            </div>
+            </motion.div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div className="mb-8" data-aos="fade-up">
-              <a
-                href="#"
-                className="block bg-white rounded-lg shadow-lg overflow-hidden"
+          <motion.div
+            variants={staggerContainer}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+          >
+            {rooms.map((room, index) => (
+              <motion.div
+                key={index}
+                variants={fadeInUp}
+                whileHover={{ y: -10 }}
+                className="bg-white rounded-lg overflow-hidden shadow-lg"
               >
-                <img
-                  src={img2}
-                  alt="room image"
-                  className="w-full object-cover mb-3"
+                <motion.img
+                  src={room.img}
+                  alt={room.title}
+                  className="w-full h-64 object-cover"
+                  whileHover={{ scale: 1.05 }}
                 />
-                <div className="p-3 text-center">
-                  <h2 className="text-xl font-semibold">Single Room</h2>
-                  <span className="uppercase tracking-wider text-gray-600">
-                    90$ / per night
-                  </span>
+                <div className="p-6 text-center">
+                  <h3 className="text-xl font-semibold mb-2">{room.title}</h3>
+                  <p className="text-gray-600">{room.price}</p>
                 </div>
-              </a>
-            </div>
-            <div className="mb-8" data-aos="fade-up">
-              <a
-                href="#"
-                className="block bg-white rounded-lg shadow-lg overflow-hidden"
-              >
-                <img
-                  src={img3}
-                  alt="room image"
-                  className="w-full object-cover mb-3"
-                />
-                <div className="p-3 text-center">
-                  <h2 className="text-xl font-semibold">Family Room</h2>
-                  <span className="uppercase tracking-wider text-gray-600">
-                    120$ / per night
-                  </span>
-                </div>
-              </a>
-            </div>
-            <div className="mb-8" data-aos="fade-up">
-              <a
-                href="#"
-                className="block bg-white rounded-lg shadow-lg overflow-hidden"
-              >
-                <img
-                  src={img4}
-                  alt="room image"
-                  className="w-full object-cover mb-3"
-                />
-                <div className="p-3 text-center">
-                  <h2 className="text-xl font-semibold">Presidential Room</h2>
-                  <span className="uppercase tracking-wider text-gray-600">
-                    250$ / per night
-                  </span>
-                </div>
-              </a>
-            </div>
-          </div>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
-      </section>
-
-      <div className="py-20 bg-gray-100">
+      </motion.section>
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeIn}
+        className="py-20 bg-gray-100 overflow-hidden"
+      >
         <div className="text-center mb-5">
-          <div className="w-full md:w-7/12 mx-auto">
-            <h2 className="text-4xl font-bold" data-aos="fade-up">
-              Photos
-            </h2>
-            <p className="mt-4" data-aos="fade-up" data-aos-delay={100}>
+          <motion.div variants={fadeInUp} className="w-full md:w-7/12 mx-auto">
+            <h2 className="text-4xl font-bold">Photos</h2>
+            <p className="mt-4">
               From budget lodgings to luxurious accommodation. You can choose
               between basic dormitories, frill-free double rooms or stylish
               gallery studios
             </p>
-          </div>
+          </motion.div>
         </div>
-        <div className="col-span-1 overflow-hidden p-12 mx-auto ">
-          <Slider {...settingss}>
-            <img
-              src={img5}
-              alt="Room"
-              className="w-full object-contain rounded-lg shadow-md"
-            />
-            <img
-              src={img6}
-              alt="Room"
-              className="w-full object-contain rounded-lg shadow-md"
-            />
-            <img
-              src={img7}
-              alt="Room"
-              className="w-full object-contain rounded-lg shadow-md"
-            />
-            <img
-              src={img8}
-              alt="Room"
-              className="w-full object-contain rounded-lg shadow-md"
-            />
+        <motion.div
+          variants={fadeInUp}
+          className="col-span-1 overflow-hidden mx-auto pb-5"
+        >
+          <Slider {...settings}>
+            {[img5, img6, img7, img8].map((img, index) => (
+              <div key={index}>
+                <img
+                  src={img}
+                  alt="Gallery"
+                  className="rounded-lg shadow-md w-[70%] h-[70%] mx-auto object-cover"
+                />
+              </div>
+            ))}
           </Slider>
-        </div>
-      </div>
-      <section className="py-20">
+        </motion.div>
+      </motion.div>
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={staggerContainer}
+        className="py-20 overflow-hidden"
+      >
         <div className="container mx-auto">
-          <div className="text-center mb-5">
-            <h2 className="text-3xl font-bold" data-aos="fade-up">
-              People Says
-            </h2>
-          </div>
-          <div className="mx-auto">
+          <motion.div variants={fadeInUp} className="text-center mb-5">
+            <h2 className="text-3xl font-bold">People Says</h2>
+          </motion.div>
+          <motion.div variants={fadeInUp} className="mx-auto">
             <Slider {...settings}>
-              <div className="text-center slider-item">
-                <div className="mb-3">
-                  <img
-                    src={img9}
-                    alt="Image placeholder"
-                    className="rounded-full mx-auto w-24 h-24"
+              {testimonials.map((item, index) => (
+                <motion.div
+                  key={index}
+                  className="text-center px-4"
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <motion.img
+                    src={item.img}
+                    alt={item.name}
+                    className="rounded-full w-24 h-24 mx-auto mb-6"
+                    whileHover={{ rotate: 5 }}
                   />
-                </div>
-                <blockquote>
-                  <p className="text-lg italic">
-                    &ldquo;A small river named Duden flows by their place and
-                    supplies it with the necessary regelialia. It is a
-                    paradisematic country, in which roasted parts of sentences
-                    fly into your mouth.&rdquo;
-                  </p>
-                </blockquote>
-                <p className="mt-3 text-sm text-gray-600">
-                  <em>&mdash; Jean Smith</em>
-                </p>
-              </div>
-
-              <div className="text-center slider-item">
-                <div className="mb-3">
-                  <img
-                    src={img10}
-                    alt="Image placeholder"
-                    className="rounded-full mx-auto w-24 h-24"
-                  />
-                </div>
-                <blockquote>
-                  <p className="text-lg italic">
-                    &ldquo;Even the all-powerful Pointing has no control about
-                    the blind texts it is an almost unorthographic life One day
-                    however a small line of blind text by the name of Lorem
-                    Ipsum decided to leave for the far World of Grammar.&rdquo;
-                  </p>
-                </blockquote>
-                <p className="mt-3 text-sm text-gray-600">
-                  <em>&mdash; John Doe</em>
-                </p>
-              </div>
-
-              <div className="text-center slider-item">
-                <div className="mb-3">
-                  <img
-                    src={img11}
-                    alt="Image placeholder"
-                    className="rounded-full mx-auto w-24 h-24"
-                  />
-                </div>
-                <blockquote>
-                  <p className="text-lg italic">
-                    &ldquo;When she reached the first hills of the Italic
-                    Mountains, she had a last view back on the skyline of her
-                    hometown Bookmarksgrove, the headline of Alphabet Village
-                    and the subline of her own road, the Line Lane.&rdquo;
-                  </p>
-                </blockquote>
-                <p className="mt-3 text-sm text-gray-600">
-                  <em>&mdash; John Doe</em>
-                </p>
-              </div>
-              <div className="text-center slider-item">
-                <div className="mb-3">
-                  <img
-                    src={img12}
-                    alt="Image placeholder"
-                    className="rounded-full mx-auto w-24 h-24"
-                  />
-                </div>
-                <blockquote>
-                  <p className="text-lg italic">
-                    &ldquo;When she reached the first hills of the Italic
-                    Mountains, she had a last view back on the skyline of her
-                    hometown Bookmarksgrove, the headline of Alphabet Village
-                    and the subline of her own road, the Line Lane.&rdquo;
-                  </p>
-                </blockquote>
-                <p className="mt-3 text-sm text-gray-600">
-                  <em>&mdash; John Doe</em>
-                </p>
-              </div>
+                  <blockquote className="text-lg italic mb-4 w-[60%] mx-auto">
+                    {item.quote}
+                  </blockquote>
+                  <p className="text-gray-600">— {item.name}</p>
+                </motion.div>
+              ))}
             </Slider>
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
     </>
   );
 }
