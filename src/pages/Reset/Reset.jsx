@@ -51,7 +51,7 @@ export default function ResetPassword() {
 
   return (
     <div className='container py-10'>
-      <div className='mx-auto md:w-2/3 bg-white shadow-lg p-9'>
+      <div className='mx-auto md:w-2/3 bg-white dark:bg-secondaryDarkColor shadow-lg p-9'>
         <h2 className='text-3xl font-bold text-center'>Reset Password</h2>
         <form onSubmit={handleSubmit}>
           <div className='grid grid-cols-2 gap-4 py-5'>
@@ -99,8 +99,8 @@ export default function ResetPassword() {
             </Button>
             
             {successMsg && (
-              <p className='text-yellow-500 col-span-2'>
-                {successMsg} <Link to="/login" className='text-blue-500 hover:underline'>Login now</Link>
+              <p className='text-mainColor col-span-2'>
+                {successMsg} <Link to="/login" className='text-mainColor hover:underline'>Login now</Link>
               </p>
             )}
             {errorMsg && <p className='text-red-500 col-span-2'>{errorMsg}</p>}

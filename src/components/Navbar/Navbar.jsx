@@ -94,8 +94,12 @@ export default function App() {
               <NavLink to={"/login"}>Login</NavLink>
             </NavbarItem>
             <NavbarItem>
-              <Button color="primary" variant="flat">
-                <NavLink to="/register">Sign Up</NavLink>
+              <Button
+                onPress={() => navigate("/register")}
+                color="warning"
+                variant="bordered"
+              >
+                Sign Up
               </Button>
             </NavbarItem>
           </>
@@ -106,7 +110,7 @@ export default function App() {
               <Avatar
                 isBordered
                 as="button"
-                className="transition-transform border border-yellow-500"
+                className="transition-transform border border-mainColor"
                 color="transparent"
                 name="User Menu"
                 size="sm"
@@ -114,25 +118,13 @@ export default function App() {
               />
             </DropdownTrigger>
             <DropdownMenu aria-label="Profile Actions" variant="flat">
-              <DropdownItem
-                key="My_Protofolio"
-                as={Link}
-                to="/my-profile"
-              >
+              <DropdownItem key="My_Protofolio" as={Link} to="/my-profile">
                 My Portfolio
               </DropdownItem>
-              <DropdownItem
-                key="Booking_Now"
-                as={Link}
-                to="/Rooms-available"
-              >
+              <DropdownItem key="Booking_Now" as={Link} to="/Rooms-available">
                 Booking Now
               </DropdownItem>
-              <DropdownItem
-                key="My_reservations"
-                as={Link}
-                to="/reservations"
-              >
+              <DropdownItem key="My_reservations" as={Link} to="/reservations">
                 My Reservations
               </DropdownItem>
               <DropdownItem key="logout" color="danger" onPress={Logout}>

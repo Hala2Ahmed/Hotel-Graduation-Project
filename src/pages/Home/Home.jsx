@@ -118,7 +118,7 @@ export default function Home() {
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
         variants={staggerContainer}
-        className="py-20 bg-gray-100 overflow-hidden p-10"
+        className="py-20 bg-gray-100 overflow-hidden p-10 dark:bg-secondaryDarkColor"
       >
         <div>
           <motion.div
@@ -190,7 +190,7 @@ export default function Home() {
                 key={index}
                 variants={fadeInUp}
                 whileHover={{ y: -10 }}
-                className="bg-white rounded-lg overflow-hidden shadow-lg"
+                className="bg-white rounded-lg overflow-hidden shadow-lg dark:bg-[#212529]"
               >
                 <motion.img
                   src={room.img}
@@ -200,7 +200,7 @@ export default function Home() {
                 />
                 <div className="p-6 text-center">
                   <h3 className="text-xl font-semibold mb-2">{room.title}</h3>
-                  <p className="text-gray-600">{room.price}</p>
+                  <p className="text-gray-600 dark:text-gray-400">{room.price}</p>
                 </div>
               </motion.div>
             ))}
@@ -212,7 +212,7 @@ export default function Home() {
         whileInView="visible"
         viewport={{ once: true }}
         variants={fadeIn}
-        className="py-20 bg-gray-100 overflow-hidden"
+        className="py-20 bg-gray-100 overflow-hidden dark:bg-secondaryDarkColor"
       >
         <div className="text-center mb-5">
           <motion.div variants={fadeInUp} className="w-full md:w-7/12 mx-auto">
@@ -269,7 +269,7 @@ export default function Home() {
                   <blockquote className="text-lg italic mb-4 w-[60%] mx-auto">
                     {item.quote}
                   </blockquote>
-                  <p className="text-gray-600">— {item.name}</p>
+                  <p className="text-gray-600 dark:text-gray-400">— {item.name}</p>
                 </motion.div>
               ))}
             </Slider>

@@ -13,13 +13,12 @@ export default function BookingNow() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const token = localStorage.getItem("token");
-
   const [dateValue1, setDateValue1] = useState(null);
   const [errorMessage1, setErrorMessage1] = useState("");
   const [dateValue2, setDateValue2] = useState(null);
   const [errorMessage2, setErrorMessage2] = useState("");
   const [success, setSuccess] = useState(null);
-
+  
   const {
     data: rooms = [],
     isLoading: checkingAvailability,
@@ -50,12 +49,16 @@ export default function BookingNow() {
 
         return roomsData;
       } catch (err) {
+        const currentTheme = localStorage.getItem("theme");
         const Toast = Swal.mixin({
           toast: true,
           position: "top-end",
           showConfirmButton: false,
           timer: 3000,
           timerProgressBar: true,
+          color: currentTheme === "dark" ? "#fff" : "#0d0d0d",
+          background: currentTheme === "dark" ? "#0d0d0d" : "#fff",
+
           didOpen: (toast) => {
             toast.onmouseenter = Swal.stopTimer;
             toast.onmouseleave = Swal.resumeTimer;
@@ -130,9 +133,9 @@ export default function BookingNow() {
           </div>
         </div>
       </section>
-      <section className="bg-gray-100 pb-0 absolute bottom-[-15%] left-[50%] translate-x-[-50%]">
+      <section className="bg-gray-100 dark:bg-secondaryDarkColor pb-0 absolute bottom-[-15%] left-[50%] translate-x-[-50%]">
         <div className="flex justify-center items-center">
-          <div className="container bg-white p-10 rounded shadow-md">
+          <div className="container bg-white dark:bg-secondaryDarkColor p-10 rounded shadow-md">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <DateInput
                 isInvalid={!!errorMessage1}
@@ -165,7 +168,7 @@ export default function BookingNow() {
                 }
               />
               <Button
-                className="bg-yellow-500 text-white shadow-lg mt-2"
+                className="bg-mainColor text-white shadow-lg mt-2"
                 onPress={handleCheckAvailability}
                 isLoading={checkingAvailability}
               >
@@ -186,7 +189,7 @@ export default function BookingNow() {
         rooms={rooms}
         onBookRoom={handleBookRoom}
         checkingAvailability={checkingAvailability}
-      />{" "}
+      />
     </>
   );
 }

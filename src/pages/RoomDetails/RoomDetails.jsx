@@ -114,7 +114,7 @@ export default function RoomDetails() {
         </div>
         <Link
           to="/Rooms-available"
-          className="text-blue-600 hover:text-blue-800"
+          className="text-mainColor hover:text-yellow-600"
         >
           Back to available rooms
         </Link>

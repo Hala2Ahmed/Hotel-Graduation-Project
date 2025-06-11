@@ -27,7 +27,7 @@ export default function ScrollToTopArrow() {
       {isVisible && (
         <button
           onClick={scrollToTop}
-          className="bg-yellow-500 font-bold hover:bg-yellow-600 text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg transition-all duration-300 cursor-pointer"
+          className="bg-mainColor font-bold hover:bg-yellow-600 text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg transition-all duration-300 cursor-pointer"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

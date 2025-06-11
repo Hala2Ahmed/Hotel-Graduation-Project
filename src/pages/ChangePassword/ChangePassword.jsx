@@ -39,12 +39,15 @@ export default function ChangePassword() {
       })
       .then((response) => {
         setSuccessMsg("Password changed successfully!");
+        const currentTheme = localStorage.getItem("theme");
         const Toast = Swal.mixin({
           toast: true,
           position: "top-end",
           showConfirmButton: false,
           timer: 3000,
           timerProgressBar: true,
+          color: currentTheme === "dark" ? "#fff" : "#0d0d0d",
+          background: currentTheme === "dark" ? "#0d0d0d" : "#fff",
           didOpen: (toast) => {
             toast.onmouseenter = Swal.stopTimer;
             toast.onmouseleave = Swal.resumeTimer;
@@ -74,7 +77,7 @@ export default function ChangePassword() {
 
   return (
     <div className="container py-10">
-      <div className="mx-auto md:w-2/3 bg-white shadow-lg p-9">
+      <div className="mx-auto md:w-2/3 bg-white shadow-lg p-9 dark:bg-secondaryDarkColor">
         <h2 className="text-3xl font-bold text-center">Change Password</h2>
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-2 gap-4 py-5">
@@ -120,8 +123,7 @@ export default function ChangePassword() {
               disabled={isLoading}
               isLoading={isLoading}
               type="submit"
-              className="col-span-2"
-              color="primary"
+              className="col-span-2 bg-mainColor hover:bg-yellow-600"
             >
               Change Password
             </Button>
@@ -132,7 +134,7 @@ export default function ChangePassword() {
             )}
           </div>
         </form>
-        <Link to="/my-profile" className="text-blue-500 hover:underline">
+        <Link to="/my-profile" className="text-mainColor hover:underline">
           Back to Profile
         </Link>
       </div>

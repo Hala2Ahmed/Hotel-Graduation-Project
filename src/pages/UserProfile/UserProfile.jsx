@@ -72,7 +72,7 @@ export default function UserProfile() {
       }
     },
   });
-
+  const currentTheme = localStorage.getItem("theme");
   const mutation = useMutation({
     mutationFn: updateProfile,
     onSuccess: () => {
@@ -86,6 +86,8 @@ export default function UserProfile() {
         showConfirmButton: false,
         timer: 3000,
         timerProgressBar: true,
+        color: currentTheme === "dark" ? "#fff" : "#000",
+        background: currentTheme === "dark" ? "#000" : "#fff",
         didOpen: (toast) => {
           toast.onmouseenter = Swal.stopTimer;
           toast.onmouseleave = Swal.resumeTimer;
@@ -103,6 +105,8 @@ export default function UserProfile() {
         showConfirmButton: false,
         timer: 3000,
         timerProgressBar: true,
+        color: currentTheme === "dark" ? "#fff" : "#0d0d0d",
+        background: currentTheme === "dark" ? "#0d0d0d" : "#fff",
         didOpen: (toast) => {
           toast.onmouseenter = Swal.stopTimer;
           toast.onmouseleave = Swal.resumeTimer;
@@ -138,7 +142,7 @@ export default function UserProfile() {
 
   return (
     <div className="p-4 container">
-      <div className="bg-white shadow-lg rounded px-8 pt-6 pb-8 mb-4 max-w-md mx-auto">
+      <div className="bg-white dark:bg-secondaryDarkColor shadow-lg rounded px-8 pt-6 pb-8 mb-4 max-w-md mx-auto">
         <h2 className="text-xl font-bold mb-4 text-center">USER INFORMATION</h2>
 
         <Formik
@@ -171,13 +175,13 @@ export default function UserProfile() {
                         : img)
                     }
                     alt="Profile"
-                    className="w-32 h-32 rounded-full object-cover border-4 border-yellow-500"
+                    className="w-32 h-32 rounded-full object-cover border-4 border-mainColor"
                     onError={(e) => {
                       e.target.src = img;
                     }}
                   />
                   {editMode && (
-                    <label className="absolute bottom-0 right-0 bg-yellow-500 text-white rounded-full p-2 cursor-pointer">
+                    <label className="absolute bottom-0 right-0 bg-mainColor text-white rounded-full p-2 cursor-pointer">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="h-5 w-5"
@@ -217,7 +221,7 @@ export default function UserProfile() {
                     />
                   </>
                 ) : (
-                  <p className="text-gray-700">{values.name}</p>
+                  <p className="text-gray-700 dark:text-gray-400">{values.name}</p>
                 )}
               </div>
 
@@ -241,7 +245,7 @@ export default function UserProfile() {
                     />
                   </>
                 ) : (
-                  <p className="text-gray-700">{values.email}</p>
+                  <p className="text-gray-700 dark:text-gray-400">{values.email}</p>
                 )}
               </div>
 
@@ -265,7 +269,7 @@ export default function UserProfile() {
                     />
                   </>
                 ) : (
-                  <p className="text-gray-700">{values.phone}</p>
+                  <p className="text-gray-700 dark:text-gray-400">{values.phone}</p>
                 )}
               </div>
 
@@ -276,7 +280,7 @@ export default function UserProfile() {
                     <button
                       type="submit"
                       disabled={mutation.isLoading}
-                      className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-all w-full disabled:opacity-50"
+                      className="bg-mainColor hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-all w-full disabled:opacity-50"
                     >
                       {mutation.isLoading ? "Saving..." : "Save Changes"}
                     </button>
@@ -292,14 +296,14 @@ export default function UserProfile() {
                   <button
                     type="button"
                     onClick={() => setEditMode(true)}
-                    className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-all w-full"
+                    className="bg-mainColor hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-all w-full"
                   >
                     Edit Profile
                   </button>
                 )}
                 <Link
                   to="/change-password"
-                  className="text-yellow-500 hover:underline text-center block mt-2"
+                  className="text-mainColor hover:underline text-center block mt-2"
                 >
                   Change Password?
                 </Link>

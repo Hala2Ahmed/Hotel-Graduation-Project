@@ -13,7 +13,7 @@ export default function RoomsAvailable({
           rooms.map((room) => (
             <div
               key={room.id}
-              className="m-6 flex flex-col rounded-lg border border-gray-100 bg-white shadow-md"
+              className="m-6 flex flex-col rounded-lg border border-gray-100 dark:border-gray-800 bg-white dark:bg-[#212529] shadow-md"
             >
               <div className="mx-3 mt-3 flex h-60 overflow-hidden rounded-xl">
                 <img
@@ -38,7 +38,7 @@ export default function RoomsAvailable({
                   </div>
                 </div>
                 <Button
-                  className="w-full bg-yellow-500 text-white"
+                  className="w-full bg-mainColor text-white"
                   onPress={() => onBookRoom(room.id)}
                 >
                   View Details

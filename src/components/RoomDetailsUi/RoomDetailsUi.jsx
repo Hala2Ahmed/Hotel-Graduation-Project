@@ -16,22 +16,22 @@ export default function RoomDetailsUi({
       <div className="flex mb-6">
         <ol className="inline-flex items-center space-x-1 md:space-x-3">
           <li>
-            <Link to="/" className="text-yellow-500 hover:text-yellow-600">
+            <Link to="/" className="text-mainColor hover:text-yellow-600">
               Home
             </Link>
           </li>
           <li>
-            <span className="mx-2 text-yellow-500">/</span>
+            <span className="mx-2 text-mainColor">/</span>
             <Link
               to="/Rooms-available"
-              className="text-yellow-500 hover:text-yellow-600"
+              className="text-mainColor hover:text-yellow-600"
             >
               Rooms
             </Link>
           </li>
           <li>
-            <span className="mx-2 text-yellow-500">/</span>
-            <span className="text-yellow-500">{room.type} Room</span>
+            <span className="mx-2 text-mainColor">/</span>
+            <span className="text-mainColor">{room.type} Room</span>
           </li>
         </ol>
       </div>
@@ -66,7 +66,7 @@ export default function RoomDetailsUi({
         </div>
 
         {/* Booking Form */}
-        <div className="col-span-1 bg-white p-6 shadow-lg rounded-lg">
+        <div className="col-span-1 bg-white dark:bg-secondaryDarkColor p-6 shadow-lg rounded-lg">
           <h2 className="text-3xl font-bold mb-4 text-center">
             Book This Room
           </h2>
@@ -135,7 +135,7 @@ export default function RoomDetailsUi({
 
             <Button
               type="submit"
-              className="w-full bg-yellow-500 hover:bg-yellow-600 text-white py-3 px-4 rounded-lg font-medium"
+              className="w-full bg-mainColor hover:bg-yellow-600 text-white py-3 px-4 rounded-lg font-medium"
               isLoading={isSubmitting}
               isDisabled={!formik.isValid || isSubmitting}
             >

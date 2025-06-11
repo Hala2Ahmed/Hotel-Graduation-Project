@@ -8,7 +8,12 @@ export default {
     "./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}"
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        mainColor: "#eab308",
+        secondaryDarkColor: "#0d0d0d",
+      },
+    },
   },
   plugins: [heroui()],
 }

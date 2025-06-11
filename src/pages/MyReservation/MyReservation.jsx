@@ -32,7 +32,6 @@ export default function MyReservation() {
     },
     enabled: !!token,
   });
-
   const deleteBooking = useMutation({
     mutationFn: async (bookingReference) => {
       try {
@@ -50,11 +49,25 @@ export default function MyReservation() {
       }
     },    
     onSuccess: () => {
+      const currentTheme = localStorage.getItem("theme");
       queryClient.invalidateQueries(["bookings"]);
-      Swal.fire("Cancelled!", "Your booking has been cancelled.", "success");
+      Swal.fire({
+        title: "Cancelled!",
+        text: "Your booking has been cancelled.",
+        icon: "success",
+        color: currentTheme === "dark" ? "#fff" : "#0d0d0d",
+        background: currentTheme === "dark" ? "#0d0d0d" : "#fff",
+      });
     },
     onError: (error) => {
-      Swal.fire("Error!", error.message, "error");
+      const currentTheme = localStorage.getItem("theme");
+      Swal.fire({
+        title: "Error!",
+        text: error.message,
+        icon: "error",
+        color: currentTheme === "dark" ? "#fff" : "#0d0d0d",
+        background: currentTheme === "dark" ? "#0d0d0d" : "#fff",
+      });
     }
   });
 
@@ -93,16 +106,28 @@ export default function MyReservation() {
       }
     },
     onSuccess: () => {
+      const currentTheme = localStorage.getItem("theme");
       queryClient.invalidateQueries(["bookings"]);
       setEditingBooking(null);
-      Swal.fire("Updated!", "Your booking has been updated.", "success");
+      
+      Swal.fire({
+        title: "Updated!",
+        text: "Your booking has been updated.",
+        icon: "success",
+        color: currentTheme === "dark" ? "#fff" : "#0d0d0d",
+        background: currentTheme === "dark" ? "#0d0d0d" : "#fff",
+      });
     },
     onError: (error) => {
+      const currentTheme = localStorage.getItem("theme");
+      
       Swal.fire({
         title: "Update Failed",
         text: error.message,
         icon: "error",
-        footer: 'Please check the dates and try again'
+        footer: 'Please check the dates and try again',
+        color: currentTheme === "dark" ? "#fff" : "#0d0d0d",
+          background: currentTheme === "dark" ? "#0d0d0d" : "#fff",
       });
     }
   });
@@ -141,6 +166,7 @@ export default function MyReservation() {
 
   // إلغاء الحجز
   const handleCancelBooking = (bookingReference) => {
+    const currentTheme = localStorage.getItem("theme");
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -149,7 +175,9 @@ export default function MyReservation() {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, cancel it!",
-      cancelButtonText: "No, keep it"
+      cancelButtonText: "No, keep it",
+      color: currentTheme === "dark" ? "#fff" : "#0d0d0d",
+      background: currentTheme === "dark" ? "#0d0d0d" : "#fff",
     }).then((result) => {
       if (result.isConfirmed) {
         deleteBooking.mutate(bookingReference);
@@ -174,14 +202,14 @@ export default function MyReservation() {
   if (!bookings.length) {
     return (
       <div className="container mb-6">
-        <p className="-mt-36 text-center text-yellow-500">No reservations found.</p>
+        <p className="-mt-36 text-center text-mainColor">No reservations found.</p>
       </div>
     );
   }
 
   return (
     <div className="container mb-6 overflow-hidden">
-      <p className="pb-3 text-lg font-medium text-gray-600 border-b">
+      <p className="pb-3 text-lg font-medium text-gray-600 border-b dark:text-white">
         My Reservation
       </p>
 
@@ -190,14 +218,14 @@ export default function MyReservation() {
           <div className="grid grid-cols-[1fr_2fr] gap-4 sm:flex sm:gap-6 py-4">
             <div className="flex-shrink-0">
               <img
-                className="w-40 h-40 object-cover bg-[#EAEFFF] rounded"
+                className="w-40 h-40 object-cover rounded"
                 src={booking.room.image_path}
                 alt={booking.room.type}
               />
             </div>
             <div className="flex-1 text-sm text-[#5E5E5E]">
               <div className="flex justify-between items-start">
-                <p className="text-[#262626] text-lg font-semibold">
+                <p className="text-[#262626] text-lg font-semibold dark:text-white">
                   {booking.room.type} Room ({booking.room.room_number})
                 </p>
                 <div className="flex flex-col items-end">
@@ -214,29 +242,29 @@ export default function MyReservation() {
                   </span>
                 </div>
               </div>
-              <p className="mt-1">
-                <span className="text-sm text-[#3C3C3C] font-medium">
+              <p className="mt-1 dark:text-gray-400">
+                <span className="text-sm text-[#3C3C3C] dark:text-gray-400 font-medium">
                   Max occupancy:{" "}
                 </span>
                 {booking.room.max_occupancy}
               </p>
-              <p className="mt-1">
-                <span className="text-sm text-[#3C3C3C] font-medium">
+              <p className="mt-1 dark:text-gray-400">
+                <span className="text-sm text-[#3C3C3C] dark:text-gray-400 font-medium">
                   Price:{" "}
                 </span>
                 ${booking.room.price_per_night} /per night (Total: $
                 {booking.total_price})
               </p>
-              <p className="mt-1">
-                <span className="text-sm text-[#3C3C3C] font-medium">
+              <p className="mt-1 dark:text-gray-400">
+                <span className="text-sm text-[#3C3C3C] dark:text-gray-400 font-medium">
                   Dates:{" "}
                 </span>
                 {booking.check_in_date}
-                <span className="text-[#464646] font-medium mx-1">to</span>
+                <span className="text-[#464646] dark:text-gray-400 font-medium mx-1">to</span>
                 {booking.check_out_date}
               </p>
-              <p className="mt-1">
-                <span className="text-sm text-[#3C3C3C] font-medium">
+              <p className="mt-1 dark:text-gray-400">
+                <span className="text-sm text-[#3C3C3C] dark:text-gray-400 font-medium">
                   Booked on:{" "}
                 </span>
                 {booking.created_at}
@@ -247,14 +275,14 @@ export default function MyReservation() {
                 <>
                   <Link
                     state={{ booking }}
-                    className="text-[#696969] sm:min-w-36 py-1 border rounded hover:bg-gray-100 hover:text-white transition-all duration-300 flex items-center justify-center"
+                    className="text-[#696969] sm:min-w-36 py-1 border rounded hover:bg-gray-100 hover:text-white dark:hover:bg-[#212529] transition-all duration-300 flex items-center justify-center"
                   >
-                    <p className="text-gray-500 text-sm font-medium mx-4">
+                    <p className="text-gray-500 dark:text-gray-400 text-sm font-medium mx-4">
                       YaadPay
                     </p>
                   </Link>
-                  <button className="text-[#696969] sm:min-w-36 py-1 border rounded hover:bg-gray-100 hover:text-white transition-all duration-300 flex items-center justify-center">
-                    <p className="text-gray-500 text-sm font-medium mx-4">
+                  <button className="text-[#696969] sm:min-w-36 py-1 border rounded hover:bg-gray-100 hover:text-white dark:hover:bg-[#212529] transition-all duration-300 flex items-center justify-center">
+                    <p className="text-gray-500 dark:text-gray-400 text-sm font-medium mx-4">
                       CASH PAYMENT
                     </p>
                   </button>
@@ -263,19 +291,19 @@ export default function MyReservation() {
                       onClick={() => handleEdit(booking)}
                       disabled={editingBooking === booking.booking_reference}
                       className={`text-[#696969] sm:min-w-36 py-1 border rounded transition-all duration-300 flex items-center justify-center ${
-                        editingBooking === booking.booking_reference ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-100 hover:text-white"
+                        editingBooking === booking.booking_reference ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-100 dark:hover:bg-[#212529] hover:text-white"
                       }`}
                     >
-                      <p className="text-gray-500 text-sm font-medium mx-4">
+                      <p className="text-gray-500 dark:text-gray-400 text-sm font-medium mx-4">
                         Edit
                       </p>
                     </button>
                     <button
                       onClick={() => handleCancelBooking(booking.booking_reference)}
                       disabled={deleteBooking.isLoading}
-                      className="text-[#696969] sm:min-w-36 py-1 border rounded hover:bg-gray-100 hover:text-white transition-all duration-300 flex items-center justify-center disabled:opacity-50"
+                      className="text-[#696969] sm:min-w-36 py-1 border rounded hover:bg-gray-100 dark:hover:bg-[#212529] hover:text-white transition-all duration-300 flex items-center justify-center disabled:opacity-50"
                     >
-                      <p className="text-gray-500 text-sm font-medium mx-4">
+                      <p className="text-gray-500 dark:text-gray-400 text-sm font-medium mx-4">
                         {deleteBooking.isLoading ? "Cancelling..." : "Cancel"}
                       </p>
                     </button>
@@ -287,7 +315,7 @@ export default function MyReservation() {
 
           {/* Edit Section */}
           {editingBooking === booking.booking_reference && (
-            <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+            <div className="mt-4 p-4 bg-gray-50 dark:bg-secondaryDarkColor rounded-lg">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <DateInput
                   label="New Check-in Date"
@@ -310,13 +338,13 @@ export default function MyReservation() {
               <div className="flex justify-end gap-2">
                 <button 
                   onClick={handleCancelEdit}
-                  className="px-4 py-2 border rounded text-gray-600 hover:bg-gray-100"
+                  className="px-4 py-2 border rounded text-gray-600 dark:text-gray-400 hover:bg-gray-100"
                 >
                   Cancel
                 </button>
                 <button 
                   onClick={handleSaveChanges}
-                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
+                  className="px-4 py-2 bg-mainColor text-white rounded hover:bg-yellow-600 disabled:opacity-50"
                   disabled={updateBooking.isLoading}
                 >
                   {updateBooking.isLoading ? 'Saving...' : 'Save Changes'}

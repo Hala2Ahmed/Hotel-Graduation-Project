@@ -39,7 +39,7 @@ export default function Register() {
   return (
 <>
 <div className='container py-10'>
-<div className='mx-auto sm:w-2/3 bg-white shadow-lg p-9'>
+<div className='mx-auto sm:w-2/3 bg-white dark:bg-secondaryDarkColor shadow-lg p-9'>
 <h2 className='text-3xl font-bold text-center'>Register</h2>
   <form onSubmit={handleSubmit}>
   <div className='grid md:grid-cols-2 gap-4 py-5 '>
@@ -47,7 +47,7 @@ export default function Register() {
   <Input isInvalid={touched.email&&errors.email} errorMessage={errors.email} onBlur={handleBlur} onChange={handleChange} value={values.email} name='email' label="Email" type="email" className='md:col-span-2'/>
   <Input isInvalid={touched.password&&errors.password} errorMessage={errors.password} onBlur={handleBlur} onChange={handleChange} value={values.password} name='password' label="Password" type="password" className='col-span-1'/>
   <Input isInvalid={touched.password_confirmation&&errors.password_confirmation} errorMessage={errors.password_confirmation} onBlur={handleBlur} onChange={handleChange} value={values.password_confirmation} name='password_confirmation' label="password_confirmation" type="password" className='col-span-1'/>
-  <Button disabled={isLoading} isLoading={isLoading} type='submit' className='md:col-span-2 ' color="primary">Register</Button>
+  <Button disabled={isLoading} isLoading={isLoading} type='submit' className='md:col-span-2 bg-mainColor hover:bg-yellow-600'>Register</Button>
   {errorMsg && <p className='text-red-500'>{errorMsg}</p>}
   </div>
   </form>
