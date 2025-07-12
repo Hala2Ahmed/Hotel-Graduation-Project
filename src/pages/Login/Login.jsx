@@ -40,6 +40,7 @@ export default function Login() {
   return (
 <>
 <div className='container py-10'>
+  <title>Login</title>
 <div className=' mx-auto md:w-2/3 bg-white dark:bg-secondaryDarkColor shadow-lg p-9'>
 <h2 className='text-3xl font-bold text-center'>Login Now</h2>
   <form onSubmit={handleSubmit}>

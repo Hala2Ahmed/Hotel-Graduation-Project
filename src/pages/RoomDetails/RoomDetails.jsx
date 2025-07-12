@@ -121,7 +121,8 @@ export default function RoomDetails() {
       </div>
     );
   }
-  return (
+  return <>
+  <title>Room Details</title>
     <RoomDetailsUi
       room={room}
       isLoading={isLoading}
@@ -131,5 +132,5 @@ export default function RoomDetails() {
       bookingError={bookingError}
       handleSubmit={formik.handleSubmit}
     />
-  );
+  </>
 }

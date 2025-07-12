@@ -81,6 +81,7 @@ export default function Home() {
 
   return (
     <>
+    <title>Home</title>
       <section
         className="bg-cover bg-center bg-no-repeat mx-0 h-screen overflow-hidden"
         style={{ backgroundImage: `url(${img})` }}

@@ -51,6 +51,7 @@ export default function ResetPassword() {
 
   return (
     <div className='container py-10'>
+      <title>Reset Password</title>
       <div className='mx-auto md:w-2/3 bg-white dark:bg-secondaryDarkColor shadow-lg p-9'>
         <h2 className='text-3xl font-bold text-center'>Reset Password</h2>
         <form onSubmit={handleSubmit}>

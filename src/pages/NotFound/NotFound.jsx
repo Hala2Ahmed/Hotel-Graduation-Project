@@ -3,6 +3,7 @@ import React from 'react'
 export default function NotFound() {
   return (
  <div>
+  <title>404 Not Found</title>
   <div className="dark:bg-black dark:text-white overflow-hidden">
     <div className="flex h-screen">
       <div className="m-auto text-center">

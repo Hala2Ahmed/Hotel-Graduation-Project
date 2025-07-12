@@ -39,6 +39,7 @@ export default function Register() {
   return (
 <>
 <div className='container py-10'>
+  <title>Register</title>
 <div className='mx-auto sm:w-2/3 bg-white dark:bg-secondaryDarkColor shadow-lg p-9'>
 <h2 className='text-3xl font-bold text-center'>Register</h2>
   <form onSubmit={handleSubmit}>

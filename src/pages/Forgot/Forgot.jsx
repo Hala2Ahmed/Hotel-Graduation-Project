@@ -43,6 +43,7 @@ export default function ForgotPassword() {
 
   return (
     <div className='container py-10'>
+      <title>Forgot Password</title>
       <div className='mx-auto md:w-2/3 bg-white dark:bg-secondaryDarkColor shadow-lg p-9'>
         <h2 className='text-3xl font-bold text-center'>Forgot Password</h2>
         <form onSubmit={handleSubmit}>

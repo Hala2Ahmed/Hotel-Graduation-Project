@@ -9,7 +9,6 @@ const RoomsAvailable = lazy(() => import('./pages/RoomsAvailable/RoomsAvailable'
 import Layout from './Layout/Layout'
 const RoomDetails = lazy(() => import('./pages/RoomDetails/RoomDetails'));
 const MyReservation = lazy(() => import('./pages/MyReservation/MyReservation'));
-import Payment from './pages/Payment/Payment'
 const UserProfile = lazy(() => import('./pages/UserProfile/UserProfile'));
 import AuthProvider from './Contexts/AuthContext'
 import ProtectedRoute from './Auth/ProtectedRoute'
@@ -30,7 +29,6 @@ function App() {
       {path:'/Rooms-available',element:<ProtectedRoute><Suspense fallback={<Loading />}><RoomsAvailable /></Suspense></ProtectedRoute>},
       {path:'/RoomDetails/:id',element:<ProtectedRoute><Suspense fallback={<Loading />}><RoomDetails /></Suspense></ProtectedRoute>},
       {path:'/reservations',element:<ProtectedRoute><Suspense fallback={<Loading />}><MyReservation /></Suspense></ProtectedRoute>},
-      {path:'/payment',element:<ProtectedRoute><Payment /></ProtectedRoute>},
       {path:'/my-profile',element:<ProtectedRoute><Suspense fallback={<Loading />}><UserProfile /></Suspense></ProtectedRoute>},
       {path:'/change-password',element:<ProtectedRoute><Suspense fallback={<Loading />}><ChangePassword /></Suspense></ProtectedRoute>},
       {path:'/forgot-password',element:<ProtectedAuthRoute><Forgot /></ProtectedAuthRoute>},

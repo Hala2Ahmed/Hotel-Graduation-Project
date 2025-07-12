@@ -16,6 +16,7 @@ export default function MyReservation() {
     check_out_date: null
   });
 
+  // Fetch bookings data
   const { data, isLoading, isError } = useQuery({
     queryKey: ["bookings"],
     queryFn: async () => {
@@ -74,7 +75,6 @@ export default function MyReservation() {
   const updateBooking = useMutation({
     mutationFn: async ({ bookingReference, dates }) => {
       try {
-        // تحويل CalendarDate إلى صيغة YYYY-MM-DD
         const formatDate = (date) => {
           return `${date.year}-${String(date.month).padStart(2, '0')}-${String(date.day).padStart(2, '0')}`;
         };
@@ -99,9 +99,9 @@ export default function MyReservation() {
         const serverMessage = error.response?.data?.errors?.check_in_date &&
         error.response?.data?.errors?.check_out_date ||
         error.response?.data?.errors?.check_in_date ||
-      error.response?.data?.errors?.check_out_date ||
-      error.response?.data?.error||
-      "Failed to check availability";
+        error.response?.data?.errors?.check_out_date ||
+        error.response?.data?.error||
+        "Failed to check availability";
         throw new Error(serverMessage);
       }
     },
@@ -127,14 +127,46 @@ export default function MyReservation() {
         icon: "error",
         footer: 'Please check the dates and try again',
         color: currentTheme === "dark" ? "#fff" : "#0d0d0d",
-          background: currentTheme === "dark" ? "#0d0d0d" : "#fff",
+        background: currentTheme === "dark" ? "#0d0d0d" : "#fff",
       });
     }
   });
 
-  // بدء عملية التعديل
+  // Payment checkout session mutation
+  const createCheckoutSession = useMutation({
+    mutationFn: async ({ amount, room_id }) => {
+      try {
+        // Add console.log to verify the data being sent
+        console.log("Payment request data:", { amount, room_id });
+        
+        const response = await axios.post(
+          "https://hotel.rasool.click/api/create-checkout-session",
+          {
+            amount,
+            room_id,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json"
+            }
+          }
+        );
+        return response.data;
+      } catch (error) {
+        // Enhanced error logging
+        console.error("Payment error details:", {
+          status: error.response?.status,
+          data: error.response?.data,
+          headers: error.response?.headers
+        });
+        throw new Error(error.response?.data?.error || "Failed to initiate payment");
+      }
+    },
+    // ... rest of the code
+  });
+
   const handleEdit = (booking) => {
-    // تحويل تواريخ API إلى CalendarDate
     const parseDate = (dateStr) => {
       const [year, month, day] = dateStr.split('-').map(Number);
       return new CalendarDate(year, month, day);
@@ -147,7 +179,6 @@ export default function MyReservation() {
     });
   };
 
-  // إلغاء التعديل
   const handleCancelEdit = () => {
     setEditingBooking(null);
     setEditDates({
@@ -156,7 +187,6 @@ export default function MyReservation() {
     });
   };
 
-  // حفظ التعديلات
   const handleSaveChanges = () => {
     updateBooking.mutate({
       bookingReference: editingBooking,
@@ -164,7 +194,6 @@ export default function MyReservation() {
     });
   };
 
-  // إلغاء الحجز
   const handleCancelBooking = (bookingReference) => {
     const currentTheme = localStorage.getItem("theme");
     Swal.fire({
@@ -181,6 +210,30 @@ export default function MyReservation() {
     }).then((result) => {
       if (result.isConfirmed) {
         deleteBooking.mutate(bookingReference);
+      }
+    });
+  };
+
+  // Handle payment initiation
+  const handlePayment = (booking) => {
+    const currentTheme = localStorage.getItem("theme");
+    Swal.fire({
+      title: "Confirm Payment",
+      text: `You are about to pay $${booking.total_price} for your booking. Continue?`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, proceed to payment",
+      cancelButtonText: "Cancel",
+      color: currentTheme === "dark" ? "#fff" : "#0d0d0d",
+      background: currentTheme === "dark" ? "#0d0d0d" : "#fff",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        createCheckoutSession.mutate({
+          amount: booking.total_price,
+          room_id: booking.room.id
+        });
       }
     });
   };
@@ -209,6 +262,7 @@ export default function MyReservation() {
 
   return (
     <div className="container mb-6 overflow-hidden">
+      <title>My Reservation</title>
       <p className="pb-3 text-lg font-medium text-gray-600 border-b dark:text-white">
         My Reservation
       </p>
@@ -273,19 +327,21 @@ export default function MyReservation() {
             <div className="flex flex-col gap-2 justify-end text-sm text-center">
               {booking.status === "confirmed" && (
                 <>
-                  <Link
-                    state={{ booking }}
-                    className="text-[#696969] sm:min-w-36 py-1 border rounded hover:bg-gray-100 hover:text-white dark:hover:bg-[#212529] transition-all duration-300 flex items-center justify-center"
+                  <button
+                    onClick={() => handlePayment(booking)}
+                    disabled={createCheckoutSession.isLoading}
+                    className="text-[#696969] sm:min-w-36 py-1 border rounded hover:bg-gray-100 hover:text-white dark:hover:bg-[#212529] transition-all duration-300 flex items-center justify-center disabled:opacity-50"
                   >
                     <p className="text-gray-500 dark:text-gray-400 text-sm font-medium mx-4">
-                      YaadPay
+                      {createCheckoutSession.isLoading ? "Processing..." : "Pay Now"}
                     </p>
-                  </Link>
+                  </button>
+                  
                   <button className="text-[#696969] sm:min-w-36 py-1 border rounded hover:bg-gray-100 hover:text-white dark:hover:bg-[#212529] transition-all duration-300 flex items-center justify-center">
                     <p className="text-gray-500 dark:text-gray-400 text-sm font-medium mx-4">
                       CASH PAYMENT
                     </p>
-                  </button>
+                  </button> 
                   <div className="grid md:grid-cols-2 gap-1">
                     <button 
                       onClick={() => handleEdit(booking)}

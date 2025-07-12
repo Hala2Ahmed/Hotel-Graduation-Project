@@ -120,6 +120,7 @@ export default function BookingNow() {
 
   return (
     <>
+    <title>Rooms Available</title>
       <section
         className="bg-cover bg-center bg-no-repeat mx-0 h-screen relative"
         style={{ backgroundImage: `url(${img})` }}

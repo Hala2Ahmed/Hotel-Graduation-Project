@@ -5,11 +5,12 @@ import * as Yup from "yup";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import img from "../../assets/user.svg";
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 import Loading from "../../components/Loading/Loading";
+
 const fetchProfile = async () => {
   const token = localStorage.getItem("token");
-  if (!token) throw new Error("No token found. Please log in.");
+  if (!token) {throw new Error("No token found. Please log in.")};
 
   try {
     const response = await axios.get("https://hotel.rasool.click/api/profile", {
@@ -55,6 +56,7 @@ export default function UserProfile() {
   const [editMode, setEditMode] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const currentTheme = localStorage.getItem("theme");
 
   const {
     data: userData,
@@ -72,7 +74,7 @@ export default function UserProfile() {
       }
     },
   });
-  const currentTheme = localStorage.getItem("theme");
+
   const mutation = useMutation({
     mutationFn: updateProfile,
     onSuccess: () => {
@@ -114,7 +116,7 @@ export default function UserProfile() {
       });
       Toast.fire({
         icon: "error",
-        title:(`Update failed: ${error.response?.data.message}`)
+        title: `Update failed: ${error.response?.data.message || "Unknown error"}`
       });
     },
   });
@@ -129,19 +131,17 @@ export default function UserProfile() {
     }
   };
 
-  if (isLoading)
-    return (
-        <Loading />
-    )
-  if (error)
-    return (
-      <div className="p-4 container text-center text-red-500 h-[100vh]">
-        {error.message}
-      </div>
-    );
+  if (isLoading) return <Loading />;
+  
+  if (error) return (
+    <div className="p-4 container text-center text-red-500 h-[100vh]">
+      {error.message}
+    </div>
+  );
 
   return (
     <div className="p-4 container">
+      <title>User Profile</title>
       <div className="bg-white dark:bg-secondaryDarkColor shadow-lg rounded px-8 pt-6 pb-8 mb-4 max-w-md mx-auto">
         <h2 className="text-xl font-bold mb-4 text-center">USER INFORMATION</h2>
 
@@ -162,7 +162,7 @@ export default function UserProfile() {
           }}
           enableReinitialize
         >
-          {({ values }) => (
+          {({ resetForm }) => (
             <Form>
               {/* Profile Image */}
               <div className="flex justify-center mb-6">
@@ -221,7 +221,7 @@ export default function UserProfile() {
                     />
                   </>
                 ) : (
-                  <p className="text-gray-700 dark:text-gray-400">{values.name}</p>
+                  <p className="text-gray-700 dark:text-gray-400">{userData?.name}</p>
                 )}
               </div>
 
@@ -245,7 +245,7 @@ export default function UserProfile() {
                     />
                   </>
                 ) : (
-                  <p className="text-gray-700 dark:text-gray-400">{values.email}</p>
+                  <p className="text-gray-700 dark:text-gray-400">{userData?.email}</p>
                 )}
               </div>
 
@@ -269,7 +269,9 @@ export default function UserProfile() {
                     />
                   </>
                 ) : (
-                  <p className="text-gray-700 dark:text-gray-400">{values.phone}</p>
+                  <p className="text-gray-700 dark:text-gray-400">
+                    {userData?.mobile || "Not provided"}
+                  </p>
                 )}
               </div>
 
@@ -286,7 +288,12 @@ export default function UserProfile() {
                     </button>
                     <button
                       type="button"
-                      onClick={() => setEditMode(false)}
+                      onClick={() => {
+                        resetForm();
+                        setImagePreview(null);
+                        setImageFile(null);
+                        setEditMode(false);
+                      }}
                       className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-all w-full"
                     >
                       Cancel

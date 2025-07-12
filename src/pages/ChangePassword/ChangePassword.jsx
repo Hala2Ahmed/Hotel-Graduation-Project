@@ -77,6 +77,7 @@ export default function ChangePassword() {
 
   return (
     <div className="container py-10">
+      <title>Change Password</title>
       <div className="mx-auto md:w-2/3 bg-white shadow-lg p-9 dark:bg-secondaryDarkColor">
         <h2 className="text-3xl font-bold text-center">Change Password</h2>
         <form onSubmit={handleSubmit}>
