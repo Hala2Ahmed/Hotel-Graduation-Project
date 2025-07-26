@@ -49,8 +49,12 @@ export default function RoomDetails() {
       );
       return response.data;
     },
-    onSuccess: () => {
-      navigate("/reservations");
+    onSuccess: (data) => {
+      localStorage.setItem(
+        `booking_${data.booking_reference}_checkout_url`,
+        data.checkout_url
+      );
+      navigate(`/reservations/${data.booking_reference}`);
     },
     onError: (error) => {
       console.error("Booking error:", error);

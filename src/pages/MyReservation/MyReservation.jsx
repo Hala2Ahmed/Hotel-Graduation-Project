@@ -1,13 +1,14 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import Swal from 'sweetalert2';
 import { DateInput } from "@heroui/react";
 import { CalendarDate } from "@internationalized/date";
 import Loading from "../../components/Loading/Loading";
+import { Link, useParams } from "react-router-dom";
 
 export default function MyReservation() {
+  const { bookingReference } = useParams();
   const token = localStorage.getItem("token");
   const queryClient = useQueryClient();
   const [editingBooking, setEditingBooking] = useState(null);
@@ -16,25 +17,27 @@ export default function MyReservation() {
     check_out_date: null
   });
 
-  // Fetch bookings data
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["bookings"],
+    queryKey: ["booking", bookingReference],
     queryFn: async () => {
       try {
-        const response = await axios.get("https://hotel.rasool.click/api/bookings", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          `https://hotel.rasool.click/api/bookings/${bookingReference}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         return response.data;
       } catch (error) {
-        throw new Error(error.response?.data?.error || "Failed to fetch bookings");
+        throw new Error(error.response?.data?.error || "Failed to fetch booking");
       }
     },
-    enabled: !!token,
+    enabled: !!token && !!bookingReference,
   });
   const deleteBooking = useMutation({
-    mutationFn: async (bookingReference) => {
+    mutationFn: async () => {
       try {
         const response = await axios.delete(
           `https://hotel.rasool.click/api/bookings/${bookingReference}`,
@@ -51,7 +54,7 @@ export default function MyReservation() {
     },    
     onSuccess: () => {
       const currentTheme = localStorage.getItem("theme");
-      queryClient.invalidateQueries(["bookings"]);
+      queryClient.invalidateQueries(["bookings", bookingReference]);
       Swal.fire({
         title: "Cancelled!",
         text: "Your booking has been cancelled.",
@@ -135,10 +138,7 @@ export default function MyReservation() {
   // Payment checkout session mutation
   const createCheckoutSession = useMutation({
     mutationFn: async ({ amount, room_id }) => {
-      try {
-        // Add console.log to verify the data being sent
-        console.log("Payment request data:", { amount, room_id });
-        
+      try {       
         const response = await axios.post(
           "https://hotel.rasool.click/api/create-checkout-session",
           {
@@ -149,10 +149,11 @@ export default function MyReservation() {
             headers: {
               Authorization: `Bearer ${token}`,
               "Content-Type": "application/json"
-            }
+            },
           }
         );
-        return response.data;
+        console.log("Payment response data:", response.data.url);
+        
       } catch (error) {
         // Enhanced error logging
         console.error("Payment error details:", {
@@ -194,7 +195,7 @@ export default function MyReservation() {
     });
   };
 
-  const handleCancelBooking = (bookingReference) => {
+  const handleCancelBooking = () => {
     const currentTheme = localStorage.getItem("theme");
     Swal.fire({
       title: "Are you sure?",
@@ -214,31 +215,40 @@ export default function MyReservation() {
     });
   };
 
-  // Handle payment initiation
-  const handlePayment = (booking) => {
-    const currentTheme = localStorage.getItem("theme");
+const handlePayment = (booking) => {
+  const currentTheme = localStorage.getItem("theme");
+  const checkoutUrl = localStorage.getItem(
+    `booking_${booking.booking_reference}_checkout_url`
+  );
+
+  if (!checkoutUrl) {
     Swal.fire({
-      title: "Confirm Payment",
-      text: `You are about to pay $${booking.total_price} for your booking. Continue?`,
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, proceed to payment",
-      cancelButtonText: "Cancel",
+      title: "Payment Error",
+      text: "Payment link not found. Please contact support.",
+      icon: "error",
       color: currentTheme === "dark" ? "#fff" : "#0d0d0d",
       background: currentTheme === "dark" ? "#0d0d0d" : "#fff",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        createCheckoutSession.mutate({
-          amount: booking.total_price,
-          room_id: booking.room.id
-        });
-      }
     });
-  };
+    return;
+  }
 
-  const bookings = data?.data || [];
+  Swal.fire({
+    title: "Confirm Payment",
+    text: `You are about to pay $${booking.total_price} for your booking. Continue?`,
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, proceed to payment",
+    cancelButtonText: "Cancel",
+    color: currentTheme === "dark" ? "#fff" : "#0d0d0d",
+    background: currentTheme === "dark" ? "#0d0d0d" : "#fff",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      window.location.href = checkoutUrl;
+    }
+  });
+};
 
   if (isLoading) {
     return <Loading />;
@@ -246,20 +256,14 @@ export default function MyReservation() {
 
   if (isError) {
     return (
-      <div className="container mb-6">
-        Error fetching reservations. Please try again.
+      <div className="p-4 container text-center flex items-center justify-center text-red-500 h-[60vh]">
+        {isError?.response?.data?.message || (
+          <span>Unauthenticated. Please <Link className="underline text-yellow-500" to="/login">login</Link> again</span>
+        )}
       </div>
     );
   }
-
-  if (!bookings.length) {
-    return (
-      <div className="container mb-6">
-        <p className="-mt-36 text-center text-mainColor">No reservations found.</p>
-      </div>
-    );
-  }
-
+  const booking = data.data;
   return (
     <div className="container mb-6 overflow-hidden">
       <title>My Reservation</title>
@@ -267,8 +271,7 @@ export default function MyReservation() {
         My Reservation
       </p>
 
-      {bookings.map((booking) => (
-        <div key={booking.booking_reference} className="mb-6 border-b pb-6">
+        <div className="mb-6 border-b pb-6">
           <div className="grid grid-cols-[1fr_2fr] gap-4 sm:flex sm:gap-6 py-4">
             <div className="flex-shrink-0">
               <img
@@ -282,19 +285,18 @@ export default function MyReservation() {
                 <p className="text-[#262626] text-lg font-semibold dark:text-white">
                   {booking.room.type} Room ({booking.room.room_number})
                 </p>
+                {["cancelled"].includes(booking.status) && (
                 <div className="flex flex-col items-end">
                   <span
                     className={`px-2 py-1 text-xs rounded ${
-                      booking.status === "confirmed"
-                        ? "bg-green-100 text-green-800"
-                        : booking.status === "cancelled"
-                        ? "bg-red-100 text-red-800"
-                        : "bg-yellow-100 text-yellow-800"
+                         booking.status === "cancelled" && "bg-red-100 text-red-800"
+                        // : "bg-yellow-100 text-yellow-800"
                     }`}
                   >
                     {booking.status.toUpperCase()}
                   </span>
                 </div>
+                )}
               </div>
               <p className="mt-1 dark:text-gray-400">
                 <span className="text-sm text-[#3C3C3C] dark:text-gray-400 font-medium">
@@ -325,7 +327,7 @@ export default function MyReservation() {
               </p>
             </div>
             <div className="flex flex-col gap-2 justify-end text-sm text-center">
-              {booking.status === "confirmed" && (
+              {["confirmed", "pending"].includes(booking.status) && (
                 <>
                   <button
                     onClick={() => handlePayment(booking)}
@@ -336,12 +338,6 @@ export default function MyReservation() {
                       {createCheckoutSession.isLoading ? "Processing..." : "Pay Now"}
                     </p>
                   </button>
-                  
-                  <button className="text-[#696969] sm:min-w-36 py-1 border rounded hover:bg-gray-100 hover:text-white dark:hover:bg-[#212529] transition-all duration-300 flex items-center justify-center">
-                    <p className="text-gray-500 dark:text-gray-400 text-sm font-medium mx-4">
-                      CASH PAYMENT
-                    </p>
-                  </button> 
                   <div className="grid md:grid-cols-2 gap-1">
                     <button 
                       onClick={() => handleEdit(booking)}
@@ -355,7 +351,7 @@ export default function MyReservation() {
                       </p>
                     </button>
                     <button
-                      onClick={() => handleCancelBooking(booking.booking_reference)}
+                      onClick={handleCancelBooking}
                       disabled={deleteBooking.isLoading}
                       className="text-[#696969] sm:min-w-36 py-1 border rounded hover:bg-gray-100 dark:hover:bg-[#212529] hover:text-white transition-all duration-300 flex items-center justify-center disabled:opacity-50"
                     >
@@ -409,7 +405,6 @@ export default function MyReservation() {
             </div>
           )}
         </div>
-      ))}
     </div>
   );
 }

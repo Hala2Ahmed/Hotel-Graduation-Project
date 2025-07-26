@@ -3,13 +3,13 @@ import React, { useState } from 'react'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function ForgotPassword() {
   const [isLoading, setIsLoading] = useState(false)
   const [successMsg, setSuccessMsg] = useState("")
   const [errorMsg, setErrorMsg] = useState("")
-
+  const navigate=useNavigate();
   const initialValues = {
     email: "",
   }
@@ -24,9 +24,10 @@ export default function ForgotPassword() {
     setIsLoading(true)
     
     axios.post("https://hotel.rasool.click/api/auth/forgot-password", values)
-      .then(() => {
-        setSuccessMsg("Password reset link has been sent to your email")
-      })
+    .then(() => {
+      setSuccessMsg("Password reset code has been sent to your email");
+      navigate('/reset-password', { state: { email: values.email } });
+    })
       .catch((err) => {
         setErrorMsg(err.response?.data?.message || "Something went wrong")
       })
@@ -65,7 +66,7 @@ export default function ForgotPassword() {
               type='submit' 
               className='col-span-2 bg-mainColor hover:bg-yellow-600' 
             >
-              Send Reset Link
+              Send Reset Code
             </Button>
             
             {successMsg && <p className='text-green-500 col-span-2'>{successMsg}</p>}

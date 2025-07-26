@@ -3,27 +3,35 @@ import React, { useState } from 'react'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 export default function ResetPassword() {
   const [isLoading, setIsLoading] = useState(false)
   const [successMsg, setSuccessMsg] = useState("")
   const [errorMsg, setErrorMsg] = useState("")
-  const { token, email } = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const email = location.state?.email || "";
 
   const initialValues = {
-    email: decodeURIComponent(email || ""),
-    password: "",
-    password_confirmation: "",
-    token: token || ""
+    email: email,
+    code: "",
+    newPassword: "",
+    confirmPassword: ""
   }
 
   const validationSchema = Yup.object({
     email: Yup.string().email('Invalid email address').required("Email is required"),
-    password: Yup.string().required("Password is required").min(8, "Password must be at least 8 characters"),
-    password_confirmation: Yup.string()
-      .oneOf([Yup.ref('password'), null], 'Passwords must match')
-      .required("Password confirmation is required"),
+    code: Yup.string().required("Verification code is required").length(6, "Code must be 6 digits"),
+    newPassword: Yup.string()
+      .required("Password is required")
+      .min(8, "Password must be at least 8 characters")
+      .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
+      .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
+      .matches(/[^a-zA-Z0-9]/, 'Password must contain at least one symbol'),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref('newPassword'), null], 'Passwords must match')
+      .required('Please confirm your password')
   })
 
   const onSubmit = (values) => {
@@ -31,9 +39,17 @@ export default function ResetPassword() {
     setSuccessMsg("")
     setIsLoading(true)
     
-    axios.post("https://hotel.rasool.click/api/auth/reset-password", values)
+    axios.post("https://hotel.rasool.click/api/auth/verify-password-reset-code", {
+      email: values.email,
+      code: values.code,
+      newPassword: values.newPassword
+    })
       .then(() => {
         setSuccessMsg("Password has been reset successfully")
+        // Redirect to login after 3 seconds
+        setTimeout(() => {
+          navigate('/login');
+        }, 3000);
       })
       .catch((err) => {
         setErrorMsg(err.response?.data?.message || "Something went wrong")
@@ -66,47 +82,67 @@ export default function ResetPassword() {
               label="Email" 
               type="email" 
               className='col-span-2'
+              disabled={!!email}
             />
+            
             <Input 
-              isInvalid={touched.password && errors.password} 
-              errorMessage={errors.password} 
+              isInvalid={touched.code && errors.code} 
+              errorMessage={errors.code} 
               onBlur={handleBlur} 
               onChange={handleChange} 
-              value={values.password} 
-              name='password' 
+              value={values.code} 
+              name='code' 
+              label="Verification Code" 
+              type="text" 
+              className='col-span-2'
+              placeholder="Enter 6-digit code"
+            />
+            
+            <Input 
+              isInvalid={touched.newPassword && errors.newPassword} 
+              errorMessage={errors.newPassword} 
+              onBlur={handleBlur} 
+              onChange={handleChange} 
+              value={values.newPassword} 
+              name='newPassword' 
               label="New Password" 
               type="password" 
               className='col-span-2'
+              placeholder="At least 8 characters with uppercase, lowercase, and symbol"
             />
+            
             <Input 
-              isInvalid={touched.password_confirmation && errors.password_confirmation} 
-              errorMessage={errors.password_confirmation} 
+              isInvalid={touched.confirmPassword && errors.confirmPassword} 
+              errorMessage={errors.confirmPassword} 
               onBlur={handleBlur} 
               onChange={handleChange} 
-              value={values.password_confirmation} 
-              name='password_confirmation' 
-              label="Confirm New Password" 
+              value={values.confirmPassword} 
+              name='confirmPassword' 
+              label="Confirm Password" 
               type="password" 
               className='col-span-2'
             />
+            
             <Button 
               disabled={isLoading} 
               isLoading={isLoading} 
               type='submit' 
-              className='col-span-2' 
-              color="primary"
+              className='col-span-2 bg-mainColor hover:bg-yellow-600' 
             >
               Reset Password
             </Button>
             
             {successMsg && (
-              <p className='text-mainColor col-span-2'>
-                {successMsg} <Link to="/login" className='text-mainColor hover:underline'>Login now</Link>
+              <p className='text-green-500 col-span-2'>
+                {successMsg} You will be redirected to login shortly...
               </p>
             )}
             {errorMsg && <p className='text-red-500 col-span-2'>{errorMsg}</p>}
           </div>
         </form>
+        <div>
+          <Link to="/login" className='text-mainColor hover:underline'>Back to Login</Link>
+        </div>
       </div>
     </div>
   )

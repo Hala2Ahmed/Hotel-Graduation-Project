@@ -28,7 +28,7 @@ function App() {
       {path:'/register',element:<ProtectedAuthRoute><Suspense fallback={<Loading />}><Register /></Suspense></ProtectedAuthRoute>},
       {path:'/Rooms-available',element:<ProtectedRoute><Suspense fallback={<Loading />}><RoomsAvailable /></Suspense></ProtectedRoute>},
       {path:'/RoomDetails/:id',element:<ProtectedRoute><Suspense fallback={<Loading />}><RoomDetails /></Suspense></ProtectedRoute>},
-      {path:'/reservations',element:<ProtectedRoute><Suspense fallback={<Loading />}><MyReservation /></Suspense></ProtectedRoute>},
+      {path:'/reservations/:bookingReference',element:<ProtectedRoute><Suspense fallback={<Loading />}><MyReservation /></Suspense></ProtectedRoute>},
       {path:'/my-profile',element:<ProtectedRoute><Suspense fallback={<Loading />}><UserProfile /></Suspense></ProtectedRoute>},
       {path:'/change-password',element:<ProtectedRoute><Suspense fallback={<Loading />}><ChangePassword /></Suspense></ProtectedRoute>},
       {path:'/forgot-password',element:<ProtectedAuthRoute><Forgot /></ProtectedAuthRoute>},

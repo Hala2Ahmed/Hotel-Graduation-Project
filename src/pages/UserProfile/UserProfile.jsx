@@ -68,7 +68,7 @@ export default function UserProfile() {
     onError: (error) => {
       if (
         error.message.includes("No token") ||
-        error.message.includes("Session expired")
+        error.message.includes("Session expired") 
       ) {
         navigate("/login");
       }
@@ -134,7 +134,7 @@ export default function UserProfile() {
   if (isLoading) return <Loading />;
   
   if (error) return (
-    <div className="p-4 container text-center text-red-500 h-[100vh]">
+    <div className="p-4 container text-center flex items-center justify-center text-red-500 h-[60vh]">
       {error.message}
     </div>
   );

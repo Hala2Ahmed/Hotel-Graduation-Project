@@ -124,9 +124,6 @@ export default function App() {
               <DropdownItem key="Booking_Now" as={Link} to="/Rooms-available">
                 Booking Now
               </DropdownItem>
-              <DropdownItem key="My_reservations" as={Link} to="/reservations">
-                My Reservations
-              </DropdownItem>
               <DropdownItem key="logout" color="danger" onPress={Logout}>
                 Log Out
               </DropdownItem>
