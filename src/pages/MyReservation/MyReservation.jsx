@@ -55,6 +55,7 @@ export default function MyReservation() {
     onSuccess: () => {
       const currentTheme = localStorage.getItem("theme");
       queryClient.invalidateQueries(["bookings", bookingReference]);
+      localStorage.removeItem(`booking_${bookingReference}_checkout_url`);
       Swal.fire({
         title: "Cancelled!",
         text: "Your booking has been cancelled.",
@@ -152,8 +153,6 @@ export default function MyReservation() {
             },
           }
         );
-        console.log("Payment response data:", response.data.url);
-        
       } catch (error) {
         // Enhanced error logging
         console.error("Payment error details:", {
@@ -164,7 +163,6 @@ export default function MyReservation() {
         throw new Error(error.response?.data?.error || "Failed to initiate payment");
       }
     },
-    // ... rest of the code
   });
 
   const handleEdit = (booking) => {

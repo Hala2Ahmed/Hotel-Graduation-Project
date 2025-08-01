@@ -48,9 +48,9 @@ const settings = {
 };
 export default function Home() {
   const rooms = [
-    { img: img2, title: "Single Room", price: "90$ / per night" },
-    { img: img3, title: "Family Room", price: "120$ / per night" },
-    { img: img4, title: "Presidential Room", price: "250$ / per night" },
+    { img: img2, title: "Double Room", price: "150$ / per night" },
+    { img: img3, title: "Deluxe Room", price: "190$ / per night" },
+    { img: img4, title: "Double Room", price: "120$ / per night" },
   ];
   const testimonials = [
     {
